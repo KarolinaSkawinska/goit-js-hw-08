@@ -63,3 +63,47 @@ const images = [
     description: "Lighthouse Coast Sea",
   },
 ];
+
+document.addEventListener("DOMContentLoaded", () => {
+  const gallery = document.querySelector(".gallery");
+
+  gallery.addEventListener("click", (event) => {
+    event.preventDefault();
+
+    const link = event.target.closest(".gallery-link");
+    if (link) {
+      const largeImage = link.href;
+
+      // Create the modal with basicLightbox
+      const myModal = basicLightbox.create(
+        `
+        <div class="modal">
+          <img src="${largeImage}" alt="${
+          link.querySelector("img").alt
+        }" width="1112" height="640">
+        </div>
+      `,
+        {
+          onShow: (myModal) => {
+            document.addEventListener("keydown", onEscKeyPress);
+          },
+          onClose: (myModal) => {
+            document.removeEventListener("keydown", onEscKeyPress);
+          },
+        }
+      );
+
+      myModal.show();
+
+      function onEscKeyPress(event) {
+        if (
+          event.key === "Escape" ||
+          event.key === "Esc" ||
+          event.keyCode === 27
+        ) {
+          myModal.close();
+        }
+      }
+    }
+  });
+});
